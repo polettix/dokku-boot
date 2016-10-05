@@ -8,4 +8,4 @@ dokku-debian.pl: *.sh
 	chmod +x dokku-debian.pl
 
 push::
-	scp dokku-debian.pl rdo1:
+	scp dokku-debian.pl rbot:
