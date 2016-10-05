@@ -51,3 +51,5 @@ END
 fi
 
 [ -n "$RELOAD" ] && sh "$IFUP"
+
+exit 0
