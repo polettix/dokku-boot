@@ -1,9 +1,11 @@
 #!/bin/bash
 
 set -eo pipefail
+REGEN_RULES="$1"
+RELOAD=''
 
 RULES='/etc/network/iptables.rules'
-if [ ! -e "$RULES" ] ; then
+if [ -n "$REGEN_RULES" -o ! -e "$RULES" ] ; then
    {
       cat <<END
 *filter
@@ -26,6 +28,8 @@ END
       echo COMMIT
    }>"$RULES.tmp"
    mv "$RULES.tmp" "$RULES"
+
+   RELOAD=1
 fi
 
 IFUP='/etc/network/if-up.d/iptables'
@@ -36,5 +40,8 @@ iptables-restore <"$RULES"
 END
    chmod +x "$IFUP.tmp"
    mv "$IFUP.tmp" "$IFUP"
-   sh "$IFUP"
+
+   RELOAD=1
 fi
+
+[ -n "$RELOAD" ] && sh "$IFUP"
