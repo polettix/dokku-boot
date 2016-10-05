@@ -1,5 +1,10 @@
 #!/bin/bash
 
-dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
-dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
-dokku plugin:install https://github.com/dokku/dokku-redis.git redis
+BASE='/var/lib/dokku/plugins/available'
+
+[ -e "$BASE/letsencrypt" ] \
+   || dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git
+[ -e "$BASE/postgres" ] \
+   || dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
+[ -e "$BASE/redis" ] \
+   || dokku plugin:install https://github.com/dokku/dokku-redis.git redis
