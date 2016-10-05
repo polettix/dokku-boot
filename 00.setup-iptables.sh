@@ -23,13 +23,21 @@ END
    
       for ip in $(hostname -I) ; do
          echo "-A OUTPUT -s $ip -j ACCEPT"
+
+         if [ -n "$REGEN_RULES" ] ; then
+            eip="$(echo "$ip" | sed -e 's/\./[.]/g')"
+            if ! iptables -S OUTPUT | grep " $eip/" >/dev/null 2>&1 ; then
+               # rule is not present, add it
+               iptables -A OUTPUT -s "$ip" -j ACCEPT
+            fi
+         fi
       done
 
       echo COMMIT
    }>"$RULES.tmp"
    mv "$RULES.tmp" "$RULES"
 
-   RELOAD=1
+   [ -z "$REGEN_RULES" ] && RELOAD=1
 fi
 
 IFUP='/etc/network/if-up.d/iptables'
@@ -40,8 +48,6 @@ iptables-restore <"$RULES"
 END
    chmod +x "$IFUP.tmp"
    mv "$IFUP.tmp" "$IFUP"
-
-   RELOAD=1
 fi
 
 [ -n "$RELOAD" ] && sh "$IFUP"
