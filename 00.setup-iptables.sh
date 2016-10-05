@@ -24,13 +24,17 @@ END
       done
 
       echo COMMIT
-   }>"$RULES"
+   }>"$RULES.tmp"
+   mv "$RULES.tmp" "$RULES"
 fi
 
 IFUP='/etc/network/if-up.d/iptables'
-cat >"$IFUP" <<END
+if [ ! -e "$IFUP" ] ; then
+   cat >"$IFUP.tmp" <<END
 #!/bin/sh
 iptables-restore <"$RULES"
 END
-chmod +x "$IFUP"
-sh "$IFUP"
+   chmod +x "$IFUP.tmp"
+   mv "$IFUP.tmp" "$IFUP"
+   sh "$IFUP"
+fi
