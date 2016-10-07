@@ -18,27 +18,47 @@ As easy as one, two, three:
 
 # What now?
 
-You can use [Dokku][] on the VPS you just configured.
+We will suppose that your VPS has FQDN `foobar.example.com`.
 
-Want an example? In your terminal:
+In your terminal:
 
-    # Of course, substitute your-vps-ip with... your VPS IP Address or
-    # your VPS DNS name
-    $ DOKKU_HOST='your-vps-ip'
+    $ DOKKU_HOST='foobar.example.com'
 
     # Create application in dokku
     $ ssh "dokku@$DOKKU_HOST" apps:create sample-mojo
+    # ... probably some stuff that has to do with SSH, just say yes
+    Creating sample-mojo... done
 
     # Get something to play with
     $ git clone https://github.com/polettix/sample-mojo.git sample-mojo
+    Cloning into 'sample-mojo'...
+    remote: Counting objects: 6, done.
+    remote: Compressing objects: 100% (4/4), done.
+    remote: Total 6 (delta 0), reused 6 (delta 0), pack-reused 0 Unpacking
+    objects: 100% (6/6), done.
+
     $ cd sample-mojo
+
     $ git remote add dokku "dokku@$DOKKU_HOST:sample-mojo"
     
     # Have fun!
     $ git push --set-upstream dokku master
+    Counting objects: 6, done.
+    # ... several lines of automated deployment...
+    =====> Application deployed:
+           http://sample-mojo.foobar.example.com
 
-Wait for the magic to happen... and enjoy your new shiny application at
-the address printed around the end of the last command.
+    To dokku@foobar.introm.it:sample-mojo
+    * [new branch]      master -> master
+    Branch master set up to track remote branch master from dokku.
+
+    # Now enjoy your new application, use URL provided after line
+    #
+    # =====> Application deployed:
+    #
+    # above
+    $ curl http://sample-mojo.foobar.example.com
+    Hello, World!
 
 # Bootstrap Dokku
 
