@@ -60,7 +60,7 @@ In your terminal:
     $ curl http://sample-mojo.foobar.example.com
     Hello, World!
 
-# Bootstrap Dokku
+# I'm Ready For Some Details Now!
 
 Do you know [Dokku][]? They dub it as *The smallest PaaS implementation
 you've ever seen*, and well... it really is.
@@ -78,6 +78,7 @@ something that:
     - [redis][]
     - [postgres][]
 
+This is what `dokku-boot` is about.
 
 [Dokku]: http://dokku.viewdocs.io/dokku/
 [DigitalOcean]: https://www.digitalocean.com/
