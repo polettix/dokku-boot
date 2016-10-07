@@ -9,7 +9,7 @@ As easy as one, two, three:
 
 2. Log in a shell in the VPS and run:
 
-        curl https://github.com/polettix/dokku-boot/raw/master/dokku-debian.pl \
+        curl https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl \
             | perl
 
 3. Wait for installation to complete, then go to `http://your-vps-ip/` and
