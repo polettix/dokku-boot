@@ -8,10 +8,10 @@ As easy as one, two, three:
    2016 or later!). Let's say we save the IP address of this VPS in
    variable `DOKKU_IP`
 
-2. Log in a shell in the VPS and run:
+2. Log in a shell in the VPS as user `root` and run:
 
-        curl https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl \
-            | perl
+        curl -LO https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl
+        perl dokku-boot.pl
 
 3. Wait for installation to complete, then go to `http://$DOKKU_IP/` and
    complete the setup of [Dokku][].

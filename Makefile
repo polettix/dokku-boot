@@ -1,6 +1,6 @@
 pack:: dokku-boot.pl
 
-dokku-boot.pl: dokku-boot.d/*.sh
+dokku-boot.pl: dokku-boot.sh dokku-boot.d/*.sh
 	rm -f dokku-boot.pl
 	deployable -o dokku-boot.pl         \
 		dokku-boot.d                     \
