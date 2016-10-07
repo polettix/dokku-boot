@@ -80,6 +80,11 @@ something that:
 
 This is what `dokku-boot` is about.
 
+If you want to customize it, you can modify/add scripts inside directory
+`dokku-boot.d`. To regenerate the perl script that does the magic, you
+will have to install [deployable][] and run `make`.
+
+
 [Dokku]: http://dokku.viewdocs.io/dokku/
 [DigitalOcean]: https://www.digitalocean.com/
 [letsencrypt]: https://github.com/dokku/dokku-letsencrypt
