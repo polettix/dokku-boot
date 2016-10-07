@@ -5,14 +5,15 @@ As easy as one, two, three:
 1. Spin up a new VPS somewhere, e.g. [DigitalOcean][]. I usually choose
    the latest Debian release. You can select the smallest size if you just
    want to give it a try. (And please... set up and use SSH keys, it's
-   2016 or later!)
+   2016 or later!). Let's say we save the IP address of this VPS in
+   variable `DOKKU_IP`
 
 2. Log in a shell in the VPS and run:
 
         curl https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl \
             | perl
 
-3. Wait for installation to complete, then go to `http://your-vps-ip/` and
+3. Wait for installation to complete, then go to `http://$DOKKU_IP/` and
    complete the setup of [Dokku][].
 
 # What now?
