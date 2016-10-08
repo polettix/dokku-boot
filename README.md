@@ -48,7 +48,7 @@ In your terminal:
     =====> Application deployed:
            http://sample-mojo.foobar.example.com
 
-    To dokku@foobar.introm.it:sample-mojo
+    To dokku@foobar.example.com:sample-mojo
     * [new branch]      master -> master
     Branch master set up to track remote branch master from dokku.
 
