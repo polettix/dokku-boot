@@ -14,3 +14,5 @@ chmod 600 "$IMG"
 dd if=/dev/zero of="$IMG" bs=1024k count=1000
 mkswap "$IMG"
 swapon "$IMG"
+
+echo "$IMG    none    swap    sw    0    0" >> /etc/fstab
