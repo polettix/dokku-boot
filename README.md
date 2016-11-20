@@ -90,7 +90,9 @@ There's some one-time setup to be done:
    have something (e.g. a delegation from a friend) it's OK too;
 
 5. put the relevant credentials in file `env.sh` (in your *current* directory,
-   whatever it is). Example (substitute where you see fit):
+   whatever it is). I find it useful to create "sub-users" and restrict the
+   amount of freedom these API users have. Example (substitute where you see
+   fit):
 
         : ${DO_TOKEN:='YOUR-DIGITAL-OCEAN-TOKEN'}
         : ${DO_SSH_KEY_ID:='YOUR-DIGITAL-OCEAN-SSH-KEY-ID'}
