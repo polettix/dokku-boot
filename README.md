@@ -92,12 +92,12 @@ There's some one-time setup to be done:
 5. put the relevant credentials in file `env.sh` (in your *current* directory,
    whatever it is). Example (substitute where you see fit):
 
-    : ${DO_TOKEN:='YOUR-DIGITAL-OCEAN-TOKEN'}
-    : ${DO_SSH_KEY_ID:='YOUR-DIGITAL-OCEAN-SSH-KEY-ID'}
-    : ${CLOUDNS_AUTH:='sub-auth-user=CLOUDNS-SUB-USER&auth-password=CLOUDNS-SUB-PASS'}
-    : ${VM_PROVIDER:='digital-ocean'}
-    : ${DNS_PROVIDER:='cloudns'}
-    export DO_TOKEN DO_SSH_KEY_ID CLOUDNS_AUTH VM_PROVIDER DNS_PROVIDE
+        : ${DO_TOKEN:='YOUR-DIGITAL-OCEAN-TOKEN'}
+        : ${DO_SSH_KEY_ID:='YOUR-DIGITAL-OCEAN-SSH-KEY-ID'}
+        : ${CLOUDNS_AUTH:='sub-auth-user=CLOUDNS-SUB-USER&auth-password=CLOUDNS-SUB-PASS'}
+        : ${VM_PROVIDER:='digital-ocean'}
+        : ${DNS_PROVIDER:='cloudns'}
+        export DO_TOKEN DO_SSH_KEY_ID CLOUDNS_AUTH VM_PROVIDER DNS_PROVIDE
 
 Preparation phase is over, now you're read to spin up as many VMs as you see
 fit.
