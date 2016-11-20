@@ -16,9 +16,12 @@ or later!). Let's say we save the IP address of this VPS in variable
 3. Wait for installation to complete, then go to `http://$DOKKU_IP/` and
    complete the setup of [Dokku][].
 
+There you go, your personal PaaS is waiting for you at `$DOKKU_IP`!
+
 # What now?
 
-We will suppose that your VPS has FQDN `foobar.example.com`.
+We will suppose that your VPS has FQDN `foobar.example.com` (which you
+somehow set in the DNS).
 
 In your terminal:
 
@@ -60,6 +63,62 @@ In your terminal:
     $ curl http://sample-mojo.foobar.example.com
     Hello, World!
 
+# Shameless Plug
+
+If you happen to use [Digital Ocean][] and also [ClouDNS][] customer, there's
+even a quicker route to spin up machines at will. Note that these two services
+are not for free, although you can spend less than about 5$ to get started (or
+less, depending on what you already have).
+
+There's some one-time setup to be done:
+
+1. subscribe to [Digital Ocean][] and generate an API access token ([see the
+   FAQ][do-api-faq]). You can use [my referral link][do-referral] to get
+   started with $10 credit (as of November 2016 at least).
+   
+2. define at least one SSH Key in [Digital Ocean][], [read here][do-ssh-keys]
+   if you don't know how to do it;
+
+3. subscribe to [ClouDNS][] and generate API credentials (this requires at
+   least [premium][cloudns-premium] level, again you're welcome to use [my
+   referral link][cloudns-referral]). To generate the API credentials you can
+   [read this article][cloudns-api-help];
+
+4. set up management of a domain in [ClouDNS][], we will assume it's
+   `paas.example.com`. They usually have a [promotions][cloudns-promotions]
+   page where you can get a domain for as low as about $3, but if you already
+   have something (e.g. a delegation from a friend) it's OK too;
+
+5. put the relevant credentials in file `env.sh` (in your *current* directory,
+   whatever it is). Example (substitute where you see fit):
+
+    : ${DO_TOKEN:='YOUR-DIGITAL-OCEAN-TOKEN'}
+    : ${DO_SSH_KEY_ID:='YOUR-DIGITAL-OCEAN-SSH-KEY-ID'}
+    : ${CLOUDNS_AUTH:='sub-auth-user=CLOUDNS-SUB-USER&auth-password=CLOUDNS-SUB-PASS'}
+    : ${VM_PROVIDER:='digital-ocean'}
+    : ${DNS_PROVIDER:='cloudns'}
+    export DO_TOKEN DO_SSH_KEY_ID CLOUDNS_AUTH VM_PROVIDER DNS_PROVIDE
+
+Preparation phase is over, now you're read to spin up as many VMs as you see
+fit.
+
+    shell$ /path/to/dokku-boomote.sh paas.example.com
+    # ... 6-7 minutes and a few logs later you read this:
+    *.paas.example.com => W.X.Y.Z
+
+If you plan to have multiple machines, you can of course use sub-domains for
+creating the wildcards, like this:
+
+    shell$ /path/to/dokku-boomote.sh env1.paas.example.com
+    # ...
+    *.env1.paas.example.com => A.B.C.D
+
+    shell$ /path/to/dokku-boomote.sh env2.paas.example.com
+    # ...
+    *.env2.paas.example.com => A.B.C.D
+
+and so on. Sky (well, your wallet actually) is the limit!
+
 # I'm Ready For Some Details Now!
 
 Do you know [Dokku][]? They dub it as *The smallest PaaS implementation
@@ -92,3 +151,11 @@ will have to install [deployable][] and run `make`.
 [postgres]: https://github.com/dokku/dokku-postgres
 [Let's Encrypt]: https://letsencrypt.org/
 [deployable]: http://repo.or.cz/deployable.git
+[ClouDNS]: https://www.cloudns.net/
+[do-api-faq]: https://www.digitalocean.com/help/api/
+[do-referral]: https://m.do.co/c/56e1ceafe14a
+[cloudns-premium]: https://www.cloudns.net/premium/
+[cloudns-referral]: http://www.cloudns.net/aff/id/84226/
+[cloudns-api-help]: https://www.cloudns.net/wiki/article/42/
+[do-ssh-keys]: https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2
+[cloudns-promotions]: https://www.cloudns.net/domain-pricing-list/category/promotions/
