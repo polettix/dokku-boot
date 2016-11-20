@@ -2,11 +2,11 @@
 
 As easy as one, two, three:
 
-1. Spin up a new VPS somewhere, e.g. [DigitalOcean][]. I usually choose
-   the latest Debian release. You can select the smallest size if you just
-   want to give it a try. (And please... set up and use SSH keys, it's
-   2016 or later!). Let's say we save the IP address of this VPS in
-   variable `DOKKU_IP`
+1. Spin up a new VPS somewhere, e.g. [Digital Ocean][]. I usually choose
+the latest Debian release. You can select the smallest size if you just
+want to give it a try. (And please... set up and use SSH keys, it's 2016
+or later!). Let's say we save the IP address of this VPS in variable
+`DOKKU_IP`
 
 2. Log in a shell in the VPS as user `root` and run:
 
@@ -68,7 +68,7 @@ you've ever seen*, and well... it really is.
 It's easy to install. But but... this only gets you started. I wanted
 something that:
 
-- would be easy to run in a newly spawned VPS (e.g. in [DigitalOcean][])
+- would be easy to run in a newly spawned VPS (e.g. in [Digital Ocean][])
 - would also care to set up reasonable firewalling rules:
     - leave only ports `22`, `80` and `443` open
     - put sane restrictions on forwarding and output
@@ -86,7 +86,7 @@ will have to install [deployable][] and run `make`.
 
 
 [Dokku]: http://dokku.viewdocs.io/dokku/
-[DigitalOcean]: https://www.digitalocean.com/
+[Digital Ocean]: https://www.digitalocean.com/
 [letsencrypt]: https://github.com/dokku/dokku-letsencrypt
 [redis]: https://github.com/dokku/dokku-redis
 [postgres]: https://github.com/dokku/dokku-postgres
