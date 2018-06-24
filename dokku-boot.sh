@@ -11,5 +11,6 @@ SD="$MD/$(basename "$ME" .sh).d"
 find "$SD" -type f -executable \
    | LC_ALL=C sort             \
    | while read S ; do
-      "$S"
+      printf >&2 '%s\n' "$S"
+      "$S" </dev/zero
    done
