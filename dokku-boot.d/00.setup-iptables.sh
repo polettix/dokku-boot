@@ -73,7 +73,8 @@ END
       mv "$IFUP.tmp" "$IFUP"
    fi
 
-   [ -n "$RELOAD" ] && sh "$IFUP"
+   [ -z "$RELOAD" ] && return 0
+   sh "$IFUP"
 }
 
 IPV=ipv4 \
