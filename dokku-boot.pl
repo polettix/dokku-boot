@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use 5.006_002;
-our $VERSION = '20180624.230646';
+our $VERSION = '20180624.230910';
 use English qw( -no_match_vars );
 use Fatal qw( close chdir opendir closedir );
 use File::Temp qw( tempdir );
@@ -434,10 +434,10 @@ __END__
 9 139
 config.pl
 $VAR1 = {
+          'passthrough' => 0,
           'deploy' => [
                         'dokku-boot.sh'
-                      ],
-          'passthrough' => 0
+                      ]
         };
 
 
