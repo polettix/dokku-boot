@@ -12,5 +12,5 @@ find "$SD" -type f -executable \
    | LC_ALL=C sort             \
    | while read S ; do
       printf >&2 '%s\n' "$S"
-      "$S" </dev/zero
+      "$S" </dev/null
    done
