@@ -67,7 +67,7 @@ ensure_rules() {
                if ! "$IPTABLES" -S OUTPUT | grep " $eip/" >/dev/null 2>&1
                then
                   # rule is not present, add it
-                  "$IPTABLES" -A OUTPUT -S "$IP" -j ACCEPT
+                  "$IPTABLES" -A OUTPUT -s "$IP" -j ACCEPT
                fi
             fi >/dev/null 2>&1
          done
