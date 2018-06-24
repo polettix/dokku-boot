@@ -59,7 +59,7 @@ ensure_rules() {
          "$BASE_RULES"
 
          local IP
-         for IP in "$IPS" ; do
+         for IP in $("$IPS") ; do
             printf '%s\n' "-A OUTPUT -s $IP -j ACCEPT"
 
             if [ -n "$REGEN_RULES" ] ; then
@@ -72,7 +72,6 @@ ensure_rules() {
             fi >/dev/null 2>&1
          done
 
-         "$IPS" | sed -e 's/^\(.*\)/-A OUTPUT -s \1 -j ACCEPT/'
          printf 'COMMIT\n'
       } >"$RULES.tmp"
       mv "$RULES.tmp" "$RULES"
