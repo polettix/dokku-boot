@@ -57,11 +57,26 @@ ensure_rules() {
    if [ -n "$REGEN_RULES" -o ! -e "$RULES" ] ; then
       {
          "$BASE_RULES"
+
+         local IP
+         for IP in "$IPS" ; do
+            printf '%s\n' "-A OUTPUT -s $IP -j ACCEPT"
+
+            if [ -n "$REGEN_RULES" ] ; then
+               local eip="$(printf '%s' "$IP" | sed -e 's/\./[.]/g')"
+               if ! "$IPTABLES" -S OUTPUT | grep " $eip/" >/dev/null 2>&1
+               then
+                  # rule is not present, add it
+                  "$IPTABLES" -A OUTPUT -S "$IP" -j ACCEPT
+               fi
+            fi >/dev/null 2>&1
+         done
+
          "$IPS" | sed -e 's/^\(.*\)/-A OUTPUT -s \1 -j ACCEPT/'
          printf 'COMMIT\n'
       } >"$RULES.tmp"
       mv "$RULES.tmp" "$RULES"
-      RELOAD=1
+      [ -z "$REGEN_RULES" ] && RELOAD=1
    fi
 
    if [ ! -e "$IFUP" ] ; then
