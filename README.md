@@ -1,20 +1,25 @@
 # Get Me Started, Fast!
 
-As easy as one, two, three:
+As easy as one, two... that's it:
 
-1. Spin up a new VPS somewhere, e.g. [Digital Ocean][]. I usually choose
-the latest Debian release. You can select the smallest size if you just
-want to give it a try. (And please... set up and use SSH keys, it's 2016
-or later!). Let's say we save the IP address of this VPS in variable
-`DOKKU_IP`
+1. Spin up a new VPS somewhere, e.g. [Digital Ocean][]:
+    - choose the latest Debian release
+    - select the smallest size if you just want to give it a try
+    - set up your SSH keys
+    - use the following `cloud-init` file:
 
-2. Log in a shell in the VPS as user `root` and run:
+            #!/bin/sh
+            apt-get update &&
+            apt-get install -y curl perl &&
+            curl -LO https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl &&
+            perl dokku-boot.pl
 
-        curl -LO https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl
-        perl dokku-boot.pl
+    - take note of the IP address and put it into environment variable
+      `DOKKU_IP`
 
-3. Wait for installation to complete, then go to `http://$DOKKU_IP/` and
-   complete the setup of [Dokku][].
+2. Wait for installation to complete (e.g. log into `DOKKU_IP` and check
+`/var/log/cloud-init-output.log`), then go to `http://$DOKKU_IP/` in the
+browser and complete the setup of [Dokku][].
 
 There you go, your personal PaaS is waiting for you at `$DOKKU_IP`!
 
