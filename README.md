@@ -1,6 +1,7 @@
 # Get Me Started, Fast!
 
-As easy as one, two... that's it:
+There's a one-step procedure if you are fine with unattended installation
+and e.g. want to set domain `example.com`:
 
 1. Spin up a new VPS somewhere, e.g. [Digital Ocean][]:
     - choose the latest Debian release
@@ -12,14 +13,10 @@ As easy as one, two... that's it:
             apt-get update &&
             apt-get install -y curl perl &&
             curl -LO https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl &&
-            perl dokku-boot.pl
+            UNATTENDED=yes DOMAIN=example.com perl dokku-boot.pl
 
     - take note of the IP address and put it into environment variable
       `DOKKU_IP`
-
-2. Wait for installation to complete (e.g. log into `DOKKU_IP` and check
-`/var/log/cloud-init-output.log`), then go to `http://$DOKKU_IP/` in the
-browser and complete the setup of [Dokku][].
 
 There you go, your personal PaaS is waiting for you at `$DOKKU_IP`!
 
