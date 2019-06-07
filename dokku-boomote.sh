@@ -39,7 +39,7 @@ set_environment() {
    # set default values at last, if necessary
    if [ -n "$DOKKU_SUBDOMAIN" ] ; then
       : ${DOKKU_HOSTNAME:="$DOKKU_SUBDOMAIN.$DOKKU_DOMAIN"}
-      DOKKU_WILDCARD="*.DOKKU_SUBDOMAIN"
+      DOKKU_WILDCARD="*.$DOKKU_SUBDOMAIN"
    else
       : ${DOKKU_HOSTNAME:="$DOKKU_DOMAIN"}
       DOKKU_WILDCARD="*"
