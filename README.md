@@ -1,22 +1,19 @@
 # Get Me Started, Fast!
 
-There's a one-step procedure if you are fine with unattended installation
-and e.g. want to set domain `example.com`:
+It can be very fast...
 
-1. Spin up a new VPS somewhere, e.g. [Digital Ocean][]:
-    - choose the latest Debian release
-    - select the smallest size if you just want to give it a try
-    - set up your SSH keys
-    - use the following `cloud-init` file:
+1. Copy file `sample-env.sh` to `env.sh`
 
-            #!/bin/sh
-            apt-get update &&
-            apt-get install -y curl perl &&
-            curl -LO https://github.com/polettix/dokku-boot/raw/master/dokku-boot.pl &&
-            UNATTENDED=yes DOMAIN=example.com perl dokku-boot.pl
+2. Edit file `env.sh` and put the right values. It's assuming that you
+   want to spin up one instance in [Digital Ocean][] and manage DNS
+   wildcard with ClouDNS.
 
-    - take note of the IP address and put it into environment variable
-      `DOKKU_IP`
+3. Run:
+
+      ./dokku-boomote.sh
+
+   and take note of the resulting IP, populating environment variable
+   `DOKKU_IP`
 
 There you go, your personal PaaS is waiting for you at `$DOKKU_IP`!
 
@@ -106,20 +103,9 @@ There's some one-time setup to be done:
 Preparation phase is over, now you're read to spin up as many VMs as you see
 fit.
 
-    shell$ /path/to/dokku-boomote.sh paas.example.com
+    shell$ /path/to/dokku-boomote.sh paas.example.com '' example.com '*.paas'
     # ... 6-7 minutes and a few logs later you read this:
     *.paas.example.com => W.X.Y.Z
-
-If you plan to have multiple machines, you can of course use sub-domains for
-creating the wildcards, like this:
-
-    shell$ /path/to/dokku-boomote.sh env1.paas.example.com
-    # ...
-    *.env1.paas.example.com => A.B.C.D
-
-    shell$ /path/to/dokku-boomote.sh env2.paas.example.com
-    # ...
-    *.env2.paas.example.com => A.B.C.D
 
 and so on. Sky (well, your wallet actually) is the limit!
 
