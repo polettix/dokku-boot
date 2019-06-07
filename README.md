@@ -103,7 +103,7 @@ There's some one-time setup to be done:
 Preparation phase is over, now you're read to spin up as many VMs as you see
 fit.
 
-    shell$ /path/to/dokku-boomote.sh paas.example.com '' example.com '*.paas'
+    shell$ /path/to/dokku-boomote.sh example.com paas
     # ... 6-7 minutes and a few logs later you read this:
     *.paas.example.com => W.X.Y.Z
 

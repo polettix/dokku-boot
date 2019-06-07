@@ -1,15 +1,14 @@
-# DOKKU_HOSTNAME should be set to the hostname that will host your
-# Dokku instance.
-DOKKU_HOSTNAME="instance.example.com"
-
 # DOKKU_DOMAIN represents the high level domain for your instance
 DOKKU_DOMAIN="example.com"
 
-# DOKKU_WILDCARD lets you set what you mean with a wildcard. For example,
-# if it is set to "*.instance" and your DOKKU_DOMAIN is set to "example.com",
-# then the resulting applications will live in a domain like
-# "*.instance.example.com"
-DOKKU_WILDCARD="*.instance"
+# DOKKU_SUBDOMAIN is a sub-level you might want to attach to
+DOKKU_SUBDOMAIN="instance"
+
+# DOKKU_HOSTNAME can be set to the hostname that will host your
+# Dokku instance. It defaults to something sensible based on
+# DOKKU_SUBDOMAIN and DOKKU_DOMAIN anyway
+#
+# DOKKU_HOSTNAME="instance.example.com"
 
 # This is a path to the key that allows direct SSH access to the host
 # of your Dokku instance.

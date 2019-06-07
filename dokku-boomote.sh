@@ -26,19 +26,25 @@ set_environment() {
    fi
 
    # override from command line, if any
-   DOKKU_HOSTNAME="${1:-"$DOKKU_HOSTNAME"}"
-   if [ -z "$DOKKU_HOSTNAME" ] ; then
-      echo >&2 "no hostname, set DOKKU_HOSTNAME or pass a hostname"
+   DOKKU_DOMAIN="${1:-"$DOKKU_DOMAIN"}"
+
+   if [ -z "$DOKKU_DOMAIN" ] ; then
+      printf >&2 "please set DOKKU_DOMAIN or pass as first argument"
       return 1
    fi
-   DOKKU_IP="${2:-"$DOKKU_IP"}"
-   DOKKU_DOMAIN="${3:-"$DOKKU_DOMAIN"}"
-   DOKKU_WILDCARD="${4:-"$DOKKU_WILDCARD"}"
+
+   DOKKU_SUBDOMAIN="${2:-"$DOKKU_SUBDOMAIN"}"
+   DOKKU_IP="${3:-"$DOKKU_IP"}"
 
    # set default values at last, if necessary
+   if [ -n "$DOKKU_SUBDOMAIN" ] ; then
+      : ${DOKKU_HOSTNAME:="$DOKKU_SUBDOMAIN.$DOKKU_DOMAIN"}
+      DOKKU_WILDCARD="*.DOKKU_SUBDOMAIN"
+   else
+      : ${DOKKU_HOSTNAME:="$DOKKU_DOMAIN"}
+      DOKKU_WILDCARD="*"
+   fi
    : ${DOKKU_KEY:="$HOME/.ssh/id_rsa"}
-   : ${DOKKU_DOMAIN:="$DOKKU_HOSTNAME"}
-   : ${DOKKU_WILDCARD:="*"}
    : ${DOKKU_VHOST_ENABLE:='true'}
    : ${DOKKU_WEB_CONFIG:='false'}
    : ${DOKKU_KEY_FILE:='/root/.ssh/authorized_keys'}
