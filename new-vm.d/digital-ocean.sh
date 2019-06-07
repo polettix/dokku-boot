@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eo pipefail
 
 main() {
    fix_variables
@@ -29,8 +28,8 @@ fix_variables() {
       echo >&2 "You have to set DO_TOKEN as an env variable (e.g. in env.sh)"
       exit 1
    fi
-   if [ -z "$DOMAIN" ] ; then
-      echo >&2 "You have to set DOMAIN as an env variable (e.g. in env.sh)"
+   if [ -z "$TARGET_HOSTNAME" ] ; then
+      echo >&2 "You have to set TARGET_HOSTNAME as an env variable (e.g. in env.sh)"
       exit 1
    fi
    if [ -z "$DO_SSH_KEY_ID" ] ; then
@@ -40,6 +39,14 @@ fix_variables() {
    : ${DO_IMAGE:='debian-8-x64'}
    : ${DO_REGION:='ams2'}
    : ${DO_SIZE:='512mb'}
+}
+
+do_get() {
+   curl \
+      -X GET \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $DO_TOKEN" \
+      "https://api.digitalocean.com/v2/$1"
 }
 
 droplet_data() {
@@ -53,7 +60,7 @@ droplet_data() {
 droplet_create() {
    local JSON="$(cat - <<END
 {
-   "name": "$DOMAIN",
+   "name": "$TARGET_HOSTNAME",
    "region": "$DO_REGION",
    "size": "$DO_SIZE",
    "image": "$DO_IMAGE",
@@ -87,4 +94,9 @@ END
    echo "$DROPLET_ID"
 }
 
-main
+if [[ "${BASH_SOURCE[0]}" = "${0}"  ]]
+then
+   set -eo pipefail
+   main
+   exit 0
+fi

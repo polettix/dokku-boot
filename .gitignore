@@ -1,1 +1,4 @@
 /remote-env.sh
+*.swp
+env.sh
+tmp-*

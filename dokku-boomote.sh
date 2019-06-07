@@ -5,9 +5,7 @@ main() {
 
    set_environment "$@"
 
-   if [ -z "$DOKKU_IP" ] ; then
-      DOKKU_IP="$(instantiate_vm)"
-   fi
+   [ -n "$DOKKU_IP" ] || DOKKU_IP="$(instantiate_vm)"
 
    CREDENTIALS="root@$DOKKU_IP"
    wait_vm_up
@@ -16,34 +14,41 @@ main() {
 
    remote_operations
 
-   echo "*.$DOKKU_HOSTNAME => $DOKKU_IP"
+   echo "$DOKKU_WILDCARD.$DOKKU_DOMAIN => $DOKKU_IP"
 }
 
 set_environment() {
    ME="$(readlink -f "$0")"
    MD="$(dirname "$ME")"
 
-   DOKKU_HOSTNAME="${1:-"$DOKKU_HOSTNAME"}"
-   : ${DOKKU_VHOST_ENABLE:='true'}
-   : ${DOKKU_WEB_CONFIG:='false'}
-   : ${DOKKU_KEY_FILE:='/root/.ssh/authorized_keys'}
-   DOKKU_IP="$2"
-
    if [ -e 'env.sh' ] ; then
       . 'env.sh'
    fi
 
+   # override from command line, if any
+   DOKKU_HOSTNAME="${1:-"$DOKKU_HOSTNAME"}"
    if [ -z "$DOKKU_HOSTNAME" ] ; then
-      echo >&2 "no domain, set DOKKU_HOSTNAME or pass a domain name"
+      echo >&2 "no hostname, set DOKKU_HOSTNAME or pass a hostname"
       return 1
    fi
+   DOKKU_IP="${2:-"$DOKKU_IP"}"
+   DOKKU_DOMAIN="${3:-"$DOKKU_DOMAIN"}"
+   DOKKU_WILDCARD="${4:-"$DOKKU_WILDCARD"}"
+
+   # set default values at last, if necessary
+   : ${DOKKU_KEY:="$HOME/.ssh/id_rsa"}
+   : ${DOKKU_DOMAIN:="$DOKKU_HOSTNAME"}
+   : ${DOKKU_WILDCARD:="*"}
+   : ${DOKKU_VHOST_ENABLE:='true'}
+   : ${DOKKU_WEB_CONFIG:='false'}
+   : ${DOKKU_KEY_FILE:='/root/.ssh/authorized_keys'}
 
    return 0
 }
 
 instantiate_vm() {
    echo >&2 "instantiating VM via $VM_PROVIDER"
-   local RVAL="$(DOMAIN="$DOKKU_HOSTNAME" "$MD/new-vm.d/$VM_PROVIDER.sh")"
+   local RVAL="$(TARGET_HOSTNAME="$DOKKU_HOSTNAME" "$MD/new-vm.d/$VM_PROVIDER.sh")"
    if [ -n "$RVAL" ] ; then
       echo "$RVAL"
       return 0
@@ -60,6 +65,7 @@ wait_vm_up() {
             -o ConnectTimeout="$((SLEEP_TIME + 1))" \
             -o UserKnownHostsFile=/dev/null \
             -o StrictHostKeyChecking=no \
+            -i "$DOKKU_KEY" \
             "$CREDENTIALS" ls / \
          && return 0
    done
@@ -74,24 +80,36 @@ set_DNS() {
       return 0
    fi
 
-   echo "setting *.$DOKKU_HOSTNAME to $DOKKU_IP via $DNS_PROVIDER"
+   echo "setting $DOKKU_WILDCARD.$DOKKU_DOMAIN to $DOKKU_IP via $DNS_PROVIDER"
    "$MD/dns.d/$DNS_PROVIDER.sh" \
-         set-wildcard-address "$DOKKU_HOSTNAME" "$DOKKU_IP" \
+         set-wildcard-address "$DOKKU_DOMAIN" "$DOKKU_IP" "$DOKKU_WILDCARD" \
       && return 0
    echo "cannot set DNS"
    return 1
 }
 
+remote_ssh() {
+   ssh $NH -i "$DOKKU_KEY" "$CREDENTIALS" "$@"
+}
+
+pre_deploy() {
+   (cd "$MD" && tar czf - dokku-pre-boot.d) \
+      | remote_ssh tar xzC /root -f -
+   remote_ssh /root/dokku-pre-boot.d/_run-all.sh
+}
+
 remote_operations() {
+   pre_deploy
+
    local NH='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
    (
       echo "export DOKKU_VHOST_ENABLE='$DOKKU_VHOST_ENABLE'"
       echo "export DOKKU_WEB_CONFIG='$DOKKU_WEB_CONFIG'"
       echo "export DOKKU_KEY_FILE='$DOKKU_KEY_FILE'"
       echo "export DOKKU_HOSTNAME='$DOKKU_HOSTNAME'"
-   ) | ssh $NH "$CREDENTIALS" tee /root/env.sh
-   scp $NH "$MD/dokku-boot.pl" "$CREDENTIALS:/root/dokku-boot.pl"
-   ssh $NH "$CREDENTIALS" perl "/root/dokku-boot.pl"
+   ) | remote_ssh tee /root/env.sh
+   scp $NH -i "$DOKKU_KEY" "$MD/dokku-boot.pl" "$CREDENTIALS:/root/dokku-boot.pl"
+   remote_ssh perl "/root/dokku-boot.pl"
 }
 
 main "$@" >&2
