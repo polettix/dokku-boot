@@ -95,7 +95,12 @@ set_DNS() {
 }
 
 remote_ssh() {
-   ssh $NH -i "$DOKKU_KEY" "$CREDENTIALS" "$@"
+   ssh \
+      -o UserKnownHostsFile=/dev/null \
+      -o StrictHostKeyChecking=no     \
+      -i "$DOKKU_KEY" \
+      "$CREDENTIALS" \
+      "$@"
 }
 
 pre_deploy() {
@@ -107,7 +112,6 @@ pre_deploy() {
 remote_operations() {
    pre_deploy
 
-   local NH='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
    (
       echo "export DOKKU_VHOST_ENABLE='$DOKKU_VHOST_ENABLE'"
       echo "export DOKKU_WEB_CONFIG='$DOKKU_WEB_CONFIG'"
