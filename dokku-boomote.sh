@@ -94,13 +94,22 @@ set_DNS() {
    return 1
 }
 
-remote_ssh() {
-   ssh \
+remote_sshish() {
+   local cmd=$1
+   shift
+   "$cmd" \
       -o UserKnownHostsFile=/dev/null \
       -o StrictHostKeyChecking=no     \
       -i "$DOKKU_KEY" \
-      "$CREDENTIALS" \
       "$@"
+}
+
+remote_ssh() {
+   remote_sshish ssh "$CREDENTIALS" "$@"
+}
+
+remote_scp() {
+   remote_sshish scp "$@"
 }
 
 pre_deploy() {
@@ -118,7 +127,7 @@ remote_operations() {
       echo "export DOKKU_KEY_FILE='$DOKKU_KEY_FILE'"
       echo "export DOKKU_HOSTNAME='$DOKKU_HOSTNAME'"
    ) | remote_ssh tee /root/env.sh
-   scp $NH -i "$DOKKU_KEY" "$MD/dokku-boot.pl" "$CREDENTIALS:/root/dokku-boot.pl"
+   remote_scp "$MD/dokku-boot.pl" "$CREDENTIALS:/root/dokku-boot.pl"
    remote_ssh perl "/root/dokku-boot.pl"
 }
 
